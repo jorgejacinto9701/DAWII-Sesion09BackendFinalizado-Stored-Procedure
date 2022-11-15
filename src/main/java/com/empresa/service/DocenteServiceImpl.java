@@ -23,7 +23,18 @@ public class DocenteServiceImpl implements DocenteService {
 
 	@Override
 	public Docente insertaActualizaDocente(Docente docente) {
-		return repository.save(docente);
+		Docente objSalida = null;
+		if (docente.getIdDocente() == 0) {
+			repository.insertaDocente(docente.getNombre(), docente.getDni(), 
+									 docente.getEstado(), docente.getUbigeo().getIdUbigeo());
+			objSalida = repository.buscaUltimoDocente();
+		}else {
+			repository.actualizaDocente(docente.getNombre(), docente.getDni(), 
+					 docente.getEstado(), docente.getUbigeo().getIdUbigeo(), docente.getIdDocente());
+			
+			objSalida = repository.buscaDocentePK(docente.getIdDocente());
+		}
+		return objSalida;
 	}
 
 
@@ -34,7 +45,7 @@ public class DocenteServiceImpl implements DocenteService {
 
 	@Override
 	public void eliminaDocente(int idDocente) {
-		repository.deleteById(idDocente);
+		repository.eliminaDocente(idDocente);
 	}
 
 
